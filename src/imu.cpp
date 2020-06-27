@@ -84,15 +84,32 @@ MotionData IMU::MotionModel(double t)
 {
 
     MotionData data;
+
+    // simple trajectory 
     // translation
     // twb:  body frame in world frame
     Eigen::Vector3d position( -3*t + 20, -t + 20, 10);
-    Eigen::Vector3d dp( -3, -1, 0);              // position导数　in world frame
-    Eigen::Vector3d ddp( 0,  0, 0);     // position二阶导数
+    Eigen::Vector3d dp( -3, -1, 0);              // position derivative in world frame
+    Eigen::Vector3d ddp( 0,  0, 0);     // position second order derivative 
+    
+    // default trajectory 
+    // // param
+    // float ellipse_x = 15;
+    // float ellipse_y = 20;
+    // float z = 1;           
+    // float K1 = 10;         
+    // float K = M_PI/ 10;    // 20 * K = 2pi 　　
+
+    // // translation
+    // // twb:  body frame in world frame
+    // Eigen::Vector3d position( ellipse_x * cos( K * t) + 5, ellipse_y * sin( K * t) + 5,  z * sin( K1 * K * t ) + 5);
+    // Eigen::Vector3d dp(- K * ellipse_x * sin(K*t),  K * ellipse_y * cos(K*t), z*K1*K * cos(K1 * K * t));             
+    // double K2 = K*K;
+    // Eigen::Vector3d ddp( -K2 * ellipse_x * cos(K*t),  -K2 * ellipse_y * sin(K*t), -z*K1*K1*K2 * sin(K1 * K * t));     
 
     // Rotation
     Eigen::Vector3d eulerAngles(0, 0, 0);   // roll ~ [-0.2, 0.2], pitch ~ [-0.3, 0.3], yaw ~ [0,2pi]
-    Eigen::Vector3d eulerAnglesRates(0, 0, 0);      // euler angles 的导数
+    Eigen::Vector3d eulerAnglesRates(0, 0, 0);      // euler angles derivaive 
 
     Eigen::Matrix3d Rwb = euler2Rotation(eulerAngles);         // body frame to world frame
     // TODO why??
@@ -114,8 +131,7 @@ MotionData IMU::MotionModel(double t)
 
 }
 
-//读取生成的imu数据并用imu动力学模型对数据进行计算，最后保存imu积分以后的轨迹，
-//用来验证数据以及模型的有效性。
+// save imu integration results 
 void IMU::testImu(std::string src, std::string dist)
 {
     std::vector<MotionData>imudata;
@@ -143,13 +159,13 @@ void IMU::testImu(std::string src, std::string dist)
         dq.y() = dtheta_half.y();
         dq.z() = dtheta_half.z();
 
-        //　imu 动力学模型　参考svo预积分论文
+        //　imu kinematic 
         Eigen::Vector3d acc_w = Qwb * (imupose.imu_acc) + gw;  // aw = Rwb * ( acc_body - acc_bias ) + gw
         Qwb = Qwb * dq;
         Vw = Vw + acc_w * dt;
         Pwb = Pwb + Vw * dt + 0.5 * dt * dt * acc_w;
 
-        //　按着imu postion, imu quaternion , cam postion, cam quaternion 的格式存储，由于没有cam，所以imu存了两次
+        //　imu postion, imu quaternion , cam postion, cam quaternion (no cam so imu saved twice)
         save_points<<imupose.timestamp<<" "
                    <<Qwb.w()<<" "
                    <<Qwb.x()<<" "
