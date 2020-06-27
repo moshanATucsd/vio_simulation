@@ -11,8 +11,12 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from GeometryLib import  drawCoordinateFrame, euler2Rbn,euler2Rnb
 import transformations as tf
+import imageio
 
 base_dir = '/Users/moshan/Documents/PhD/research/other_stuff/vio_simulation/bin'
+save_gif_flag = True  
+
+images_to_save = []
 
 point_id=[]
 x=[]
@@ -99,3 +103,13 @@ for i in range(0,len(position),5):
     # ax.legend()
     plt.show()
     plt.pause(1)
+
+    fig.canvas.draw()  # draw the canvas, cache the renderer
+    image = np.frombuffer(fig.canvas.tostring_rgb(), dtype='uint8')
+    image = image.reshape(fig.canvas.get_width_height()[::-1] + (3,))
+    images_to_save.append(image)
+
+if save_gif_flag:
+    gif_filename = 'plot_points.gif'
+    imageio.mimsave(gif_filename, [images_to_save[i]
+        for i in range(len(images_to_save))], fps=15)

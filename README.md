@@ -1,4 +1,8 @@
+## Readme 
+
 - modified from [this repo](https://github.com/HeYijia/vio_data_simulation)
+
+![demo pic](plot_points.gif)
 
 ## frames 
 
