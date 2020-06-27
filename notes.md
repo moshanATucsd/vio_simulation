@@ -47,7 +47,6 @@ cam.twb = imu.twb + imu.Rwb * params.t_bc; //  Tcw = Twb * Tbc ,  t = Rwb * tbc 
 ```
 
 ```
-// å¤–å‚æ•°
 Eigen::Matrix3d R_bc;   // cam to body
 Eigen::Vector3d t_bc;     // cam to body
 ```

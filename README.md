@@ -1,38 +1,38 @@
-# imusim
-imu和cam数据仿真,用于vio算法测试，代码有任何问题都欢迎交流 heyijia_2013@163.com，另可内推旷视科技SLAM组。
+- modified from [this repo](https://github.com/HeYijia/vio_data_simulation)
 
-![demo pic](https://github.com/HeYijia/vio_data_simulation/blob/master/bin/demo.png?raw=true)
+## frames 
 
-## 坐标系
-**B**ody frame: imu坐标系
+**B**ody frame: imu frame 
 
-**C**am frame: 相机坐标系
+**C**am frame: camera frame 
 
-**W**orld　frame: imu坐标系的第一帧位置
+**W**orld　frame: imu frame first pose 
 
-**N**avigation frame: NED(东北天) or　ENU（北东地）,本代码采用的是ENU,重力向量在该坐标系下为$(0,0,-9.81)$
+**N**avigation frame: uses ENU, g is $(0,0,-9.81)$
 
-目前，imu的z轴向上，xy平面内做椭圆运动，z轴做正弦运动，x轴沿着圆周向外。外参数Tbc将相机坐标旋转，使得相机朝向特征点。
+## structure 
 
-## 代码结构
-main/gener_alldata.cpp : 用于生成imu数据，相机轨迹，特征点像素坐标，特征点的3d坐标
+main/gener_alldata.cpp: generate data 
 
-src/paramc.h：imu噪声参数，imu频率，相机内参数等等
+src/paramc.h: parameters 
 
-src/camera_model.cpp：相机模型，调用的svo， 目前代码里这个文件删掉了
+python_tool/: visualization 
 
-python_tool/：　文件夹里为可视化工具，draw_points.py就是动态绘制相机轨迹和观测到的特征点。如果是ubuntu不需额外安装，windows需要安装python matplot等依赖项
+## format 
 
-## 数据存储的格式
-### 特征点
-x，y，z，1，u，v
+### features 
 
-每个特征出现在文件里的顺序，就是他们独立的id，可用来检索特征匹配
+- x，y，z，1，u，v
+
+- feature id is the order they appear in file 
 
 ### imu data
+
 timestamp (1)，imu quaternion(4)，imu position(3)，imu gyro(3)，imu acc(3)
 
 ### cam data
-timestamp (1)，cam quaternion(4)，cam position(3)，imu gyro(3)，imu acc(3)
 
-注意，由于imu和cam的存储采用的是同一个函数，所以cam也会存储一些gyro,acc这些数据，但是没用，是多余存储的。
+- timestamp (1)，cam quaternion(4)，cam position(3)，imu gyro(3)，imu acc(3)
+
+- gyro and acc are useless 
+

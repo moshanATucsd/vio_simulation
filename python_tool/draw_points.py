@@ -12,7 +12,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from GeometryLib import  drawCoordinateFrame, euler2Rbn,euler2Rnb
 import transformations as tf
 
-base_dir = '/Users/moshan/Documents/PhD/research/vio_simulation/bin'
+base_dir = '/Users/moshan/Documents/PhD/research/other_stuff/vio_simulation/bin'
 
 point_id=[]
 x=[]
@@ -20,11 +20,11 @@ y=[]
 z=[]
 
 with open(base_dir + '/all_points.txt', 'r') as f:
-    data = f.readlines()  #txtä¸­æ‰€æœ‰å­—ç¬¦ä¸²è¯»å…¥data
+    data = f.readlines()  
 
     for line in data:
-        odom = line.split()        #å°†å•ä¸ªæ•°æ®åˆ†éš”å¼€å­˜å¥½
-        numbers_float = list(map(float, odom)) #è½¬åŒ–ä¸ºæµ®ç‚¹æ•°
+        odom = line.split()      
+        numbers_float = list(map(float, odom)) 
         x.append( numbers_float[0] )
         y.append( numbers_float[1] )
         z.append( numbers_float[2] )
@@ -36,10 +36,10 @@ timestamp = []
 qw_index = 1
 with open(base_dir + '/cam_pose.txt', 'r') as f:   #   imu_circle   imu_spline
 
-    data = f.readlines()  #txtä¸­æ‰€æœ‰å­—ç¬¦ä¸²è¯»å…¥data
+    data = f.readlines()  
     for line in data:
-        odom = line.split()        #å°†å•ä¸ªæ•°æ®åˆ†éš”å¼€å­˜å¥½
-        numbers_float = list(map(float, odom)) #è½¬åŒ–ä¸ºæµ®ç‚¹æ•°
+        odom = line.split()     
+        numbers_float = list(map(float, odom))
 
         #timestamp.append( numbers_float[0])
         quaterntions.append( [numbers_float[qw_index], numbers_float[qw_index+1],numbers_float[qw_index+2],numbers_float[qw_index+3]   ] )   # qw,qx,qy,qz
@@ -71,10 +71,10 @@ for i in range(0,len(position),5):
 
     s = base_dir + '/keyframe/all_points_' +str(i)+'.txt'
     with open(s, 'r') as f:
-        data = f.readlines()  #txtä¸­æ‰€æœ‰å­—ç¬¦ä¸²è¯»å…¥data
+        data = f.readlines()  
         for line in data:
-            odom = line.split()        #å°†å•ä¸ªæ•°æ®åˆ†éš”å¼€å­˜å¥½
-            numbers_float = list(map(float, odom)) #è½¬åŒ–ä¸ºæµ®ç‚¹æ•°
+            odom = line.split()       
+            numbers_float = list(map(float, odom)) 
             x1.append( numbers_float[0] )
             y1.append( numbers_float[1] )
             z1.append( numbers_float[2] )
@@ -83,10 +83,10 @@ for i in range(0,len(position),5):
 
     s = base_dir + '/models/car.txt'
     with open(s, 'r') as f:
-        data = f.readlines()  # txtä¸­æ‰€æœ‰å­—ç¬¦ä¸²è¯»å…¥data
+        data = f.readlines()  
         for line in data:
-            odom = line.split()  # å°†å•ä¸ªæ•°æ®åˆ†éš”å¼€å­˜å¥½
-            numbers_float = list(map(float, odom))  # è½¬åŒ–ä¸ºæµ®ç‚¹æ•°
+            odom = line.split()  
+            numbers_float = list(map(float, odom))  
             plt.plot([numbers_float[0], numbers_float[3]], [numbers_float[1], numbers_float[4]],'b' ,zs=[numbers_float[2], numbers_float[5]])
 
     ax.scatter(x1, y1, z1,c='r',marker='^')
